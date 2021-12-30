@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const ROCK = 'rock';
+        const PAPER = 'paper';
+        const SCISSORS = 'scissors';
+
+        function computerPlay(){
+            let r = Math.floor(Math.random() * 3);
+            switch(r){
+                case 0: 
+                    return ROCK;
+                case 1:
+                    return PAPER;
+                default:
+                    return SCISSORS;
+            }
+        }
+
+        function playRound(playerSelection, computerSelection) {
+            let playerWin;
+            if (playerSelection === ROCK){
+                switch (computerSelection){
+                    case ROCK: 
+                        playerWin = false; 
+                        break;
+                    case PAPER: 
+                        playerWin = false; 
+                        break;
+                    case SCISSORS: 
+                        playerWin = true; 
+                        break;
+                }
+            } else if(playerSelection === PAPER){
+                switch (computerSelection){
+                    case ROCK: 
+                        playerWin = true;
+                        break;
+                    case PAPER: 
+                        playerWin = false;
+                        break;
+                    case SCISSORS: 
+                        playerWin = false;
+                        break;
+                }
+            } else if(playerSelection === SCISSORS) {
+                switch (computerSelection){
+                    case ROCK: 
+                        playerWin = false;
+                        break;
+                    case PAPER: 
+                        playerWin = true;
+                        break;
+                    case SCISSORS: 
+                        playerWin = false;
+                        break;
+                }
+            }
+            if (playerWin) {
+                return `You Win! ${playerSelection} beats ${computerSelection}`;
+            } else {
+                return `You Lose! ${computerSelection} beats ${playerSelection}`;   
+            }
+        }
+
+        function getUserSelection(){
+            while(true){
+                let userSelection = prompt('Enter Rock, Paper, or Scissors').toLowerCase();
+                if (userSelection === ROCK || userSelection === PAPER || userSelection === SCISSORS) {
+                    return userSelection;
+                }
+            }
+        }
+        function game(){
+            let rounds = 0
+            do {
+                const playerSelection = getUserSelection();
+                const computerSelection = computerPlay()
+
+                console.log(playRound(playerSelection, computerSelection));
+                rounds++;
+            } while (rounds != 5)
+        }
+
+        game();
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

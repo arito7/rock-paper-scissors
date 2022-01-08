@@ -5,11 +5,42 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+</head>
+<body>
+    
+    <div class="buttons">
+        <button value="rock">Rock</button>
+        <button value="paper">Paper</button>
+        <button value="scissors">Scissors</button>
+    </div>
+    <div class="results">
+        <p id="score"></p>
+    </div>
+
     <script>
         const ROCK = 'rock';
         const PAPER = 'paper';
         const SCISSORS = 'scissors';
 
+        let rounds = 0
+        let playerScore = 0
+        let computerScore = 0
+
+        const buttons = document.querySelectorAll('.buttons > button');
+        const divResults = document.querySelector('.results');
+        const pScore = document.querySelector('#score');
+
+        for (let btn of buttons) {
+            btn.addEventListener('click', play);
+        }
+
+        function play(e) {
+            game(playRound(e.target.getAttribute('value'), computerPlay()));
+        }
+
+        /**
+         * get random computer input
+         * **/
         function computerPlay(){
             let r = Math.floor(Math.random() * 3);
             switch(r){
@@ -24,7 +55,7 @@
 
         /**
          * prints result of round to console
-         * result values can be 0, 1, 2 (player win, computer win, tie)
+         * return value can be 0, 1, 2 (player win, computer win, tie)
          * **/
         function playRound(playerSelection, computerSelection) {
             let result;
@@ -38,62 +69,51 @@
             } else if(playerSelection === SCISSORS){
                 result = computerSelection === ROCK ? 1 : 0;
             }
-
+            
+            let pResult = document.createElement('p');
             switch(result){
                 case 0:
-                    console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
+                    pResult.textContent = `You Win! ${playerSelection} beats ${computerSelection}`;
                     break;
                 case 1:
-                    console.log(`You Lose! ${computerSelection} beats ${playerSelection}`);
+                    pResult.textContent = `You Lose! ${computerSelection} beats ${playerSelection}`;
                     break;
                 case 2:
-                    console.log('Tie!');
+                    pResult.textContent = 'Tie!';
                     break;
             }
+            divResults.appendChild(pResult);
             return result;
         }
 
-        function getUserSelection(){
-            while(true){
-                let userSelection = prompt('Enter Rock, Paper, or Scissors').toLowerCase();
-                if (userSelection === ROCK || userSelection === PAPER || userSelection === SCISSORS) {
-                    return userSelection;
-                }
+        /**
+         * Accesses global variables playerScore, computerScore and rounds
+         * **/
+        function game(roundResult){
+            
+            switch(roundResult){
+                case 0:
+                    playerScore++;
+                    break;
+                case 1: 
+                    computerScore++;
+                    break;
             }
-        }
-
-        function game(){
-            let rounds = 0
-            let playerScore = 0
-            let computerScore = 0
-            do {
-                const playerSelection = getUserSelection();
-                const computerSelection = computerPlay();
+            rounds++;
                 
-                switch(playRound(playerSelection, computerSelection)){
-                    case 0:
-                        playerScore++;
-                        break;
-                    case 1: 
-                        computerScore++;
-                        break;
+            pScore.textContent = `Player: ${playerScore}   Computer: ${computerScore}`;
+            
+            if (rounds >= 5) {
+                if (playerScore > computerScore){
+                    pScore.textContent = 'Player Wins!';
+                } else if(playerScore < computerScore) {
+                    pScore.textContent = 'Computer Wins!';
+                } else {
+                    pScore.textContent = 'Game is a Tie!';
                 }
-                rounds++;
-            } while (rounds < 5)
-
-            if (playerScore > computerScore){
-                console.log('Player Wins!');
-            } else if(playerScore < computerScore) {
-                console.log('Computer Wins!');
-            } else {
-                console.log('Game is a Tie!');
             }
         }
 
-        game();
     </script>
-</head>
-<body>
-    
 </body>
 </html>
